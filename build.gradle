@@ -2,19 +2,23 @@
  * @author Hung Nguyen (hungng@seas.upenn.edu)
  */
 
+plugins {
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
 group 'edu.upenn.cis.precise.openicelite.iomt.medical'
 
 wrapper {
     gradleVersion = '4.8'
 }
 
-apply plugin: 'java'
-apply plugin: 'maven-publish'
 defaultTasks 'build'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-version = '0.1.1'
+version = '0.1.2'
 
 repositories {
     flatDir {
@@ -41,10 +45,15 @@ dependencies {
     implementation 'com.github.samdware:openice-lite:v0.1.1'
 }
 
+shadowJar {
+    baseName = 'openice-lite-iomt-masimo-rad8'
+    classifier = null
+}
+
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            from components.java
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
         }
     }
 }
